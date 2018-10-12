@@ -5,6 +5,7 @@ from TaskCompletionManager import TaskCompletionManager
 from ApplicationInstanceManagement import ApplicationInstanceManagement
 from MouseMovementSimulator import MouseMovementManager
 from KeyboardSimulation import KeyboardManager
+from HighLevelLogManager import HighLevelLogManager
 import random
 import numpy as np
 
@@ -13,24 +14,22 @@ import numpy as np
 ARRAY_SIZE = 16
 
 # CONTROL PARAMETER
-runs = 1
+runs = 825
 
 maxInstanceExplorer = int(np.random.exponential(scale=1.2))+1
 maxInstanceCalculator = int(np.random.exponential(scale=1.2))+1
 maxInstanceNotepad = int(np.random.exponential(scale=1.2))+1
 
-global_mouseprecision = 0.98    # the higher the better
-global_hotkeyusage = 0.5        # 1.0 == always keys
-global_appclosing = 1.0         # 1 means always closing
-global_minimize = 0.9           # if app stays open, user tends to minimize?
-global_keyprecision = 0.98      # the higher the more precise
-global_openOrReopen = 0.0       # chance of OPENING over REOPENING
-global_reactivity = 1.0         # 0 = fast, 1 = slow
-global_repetition = 0.05        # 0 = no task repetition, 1 = max probability of repeating tasks
-global_sequential = 0.5         # lambda parameter of exponential function to select tasks
-global_search = 0.0             # 0 no search, 1 often search
-
-
+global_mouseprecision = 0.5    # the higher the better
+global_hotkeyusage = 0.95     # 1.0 == always keys
+global_appclosing = 0.05        # 1 means always closing
+global_minimize = 0.95           # if app stays open, user tends to minimize?
+global_keyprecision = 0.5     # the higher the more precise
+global_openOrReopen = 0.05       # chance of OPENING over REOPENING
+global_reactivity = 0.5        # 0 = fast, 1 = slow
+global_repetition = 0.05       # 0 = no task repetition, 1 = max probability of repeating tasks
+global_sequential = 0.0001        # lambda parameter of exponential function to select tasks
+global_search = 0.05             # 0 no search, 1 often search
 
 if __name__ == '__main__':
 
@@ -80,6 +79,7 @@ if __name__ == '__main__':
             mouse.move(target_x=1, target_y=1)
             mouse.click()
             appManager.control(application="explorer", instance=explorerId, control=1)
+            hlLog.addEvent(str(time.getTime()), "explorer open", run)
         elif (openExOReopenEx == -1 and decision == 0):
             mouse.move(target_x=1, target_y=1)
             mouse.click()
@@ -87,19 +87,23 @@ if __name__ == '__main__':
             mouse.move(target_x=1, target_y=2)
             mouse.click()
             appManager.control(application="explorer", instance=explorerId, control=1)
+            hlLog.addEvent(str(time.getTime()), "explorer open", run)
         elif (openExOReopenEx == -1 and decision == 1):
             keyboard.write("#3675#")
             keyboard.write("this")
             keyboard.write("#28#")
             appManager.control(application="explorer", instance=explorerId, control=1)
+            hlLog.addEvent(str(time.getTime()), "explorer open", run)
         elif (openExOReopenEx == 1 and decision == 1):
             keyboard.write("#56#")
             keyboard.write("#15#")
             appManager.control(application="explorer", instance=explorerId, control=4)
+            hlLog.addEvent(str(time.getTime()), "explorer maximize", run)
         elif (openExOReopenEx == 1 and decision == -1):
             mouse.move(1,2)
             mouse.click()
             appManager.control(application="explorer", instance=explorerId, control=4)
+            hlLog.addEvent(str(time.getTime()), "explorer maximize", run)
 
 
         ## Change directory to documents/summary
@@ -125,6 +129,7 @@ if __name__ == '__main__':
             elif(decision == -1):
                 keyboard.write("#14#")
             appManager.updatePath(explorerId, "documents/")
+            hlLog.addEvent(str(time.getTime()), "explorer path to documents/", run)
 
         ## Change directory to documents
         if (appManager.explorerPaths[explorerId] == "MAIN"):
@@ -151,6 +156,7 @@ if __name__ == '__main__':
                 keyboard.write("documents/")
                 keyboard.write("#28#")
             appManager.updatePath(explorerId, "documents/")
+            hlLog.addEvent(str(time.getTime()), "explorer path to documents/", run)
 
 
         ## Change directory to documents/summary
@@ -178,6 +184,7 @@ if __name__ == '__main__':
                 keyboard.write("summary")
                 keyboard.write("#28#")
             appManager.updatePath(explorerId, "documents/summary")
+            hlLog.addEvent(str(time.getTime()), "explorer path to documents/summary", run)
 
 
         ## Create Summary File
@@ -211,10 +218,12 @@ if __name__ == '__main__':
                 mouse.click()
             ## TRIGGER DEN CLOSE IM APP INSTANCE MANAGEMENT
             appManager.control("explorer", explorerId, 0)
+            hlLog.addEvent(str(time.getTime()), "explorer close", run)
         elif random.random() < global_minimize:
             mouse.move(4,4)
             mouse.click()
             appManager.control("explorer", explorerId, 2)
+            hlLog.addEvent(str(time.getTime()), "explorer minimize", run)
 
 #### ------------------------------------------------------------------>
 
@@ -232,6 +241,7 @@ if __name__ == '__main__':
                         mouse.move(1, 2)
                         mouse.click()
                     appManager.control(application="notepad", instance=notepadId, control=4, param="summary.txt")
+                    hlLog.addEvent(str(time.getTime()), "notepad maximize", run)
 
             else:
                 if random.random() < global_search:
@@ -241,6 +251,7 @@ if __name__ == '__main__':
                         keyboard.write("#28#")
                         notepadId = appManager.getInstance(application="notepad", purpose="open")
                         appManager.control(application="notepad", instance=notepadId, control=1, param="summary.txt")
+                        hlLog.addEvent(str(time.getTime()), "notepad open", run)
                     else:
                         mouse.move(1, 1)
                         mouse.click()
@@ -248,6 +259,7 @@ if __name__ == '__main__':
                         keyboard.write("#28#")
                         notepadId = appManager.getInstance(application="notepad", purpose="open")
                         appManager.control(application="notepad", instance=notepadId, control=1, param="summary.txt")
+                        hlLog.addEvent(str(time.getTime()), "notepad open", run)
 
                 else:
                     ## DECIDE ON OPENING OR REOPENING EXPLORER
@@ -296,6 +308,7 @@ if __name__ == '__main__':
                         mouse.move(target_x=1, target_y=1)
                         mouse.click()
                         appManager.control(application="explorer", instance=explorerId, control=1)
+                        hlLog.addEvent(str(time.getTime()), "explorer open", run)
                     elif (openExOReopenEx == -1 and decision == 0):
                         mouse.move(target_x=1, target_y=1)
                         mouse.click()
@@ -303,19 +316,23 @@ if __name__ == '__main__':
                         mouse.move(target_x=1, target_y=2)
                         mouse.click()
                         appManager.control(application="explorer", instance=explorerId, control=1)
+                        hlLog.addEvent(str(time.getTime()), "explorer open", run)
                     elif (openExOReopenEx == -1 and decision == 1):
                         keyboard.write("#3675#")
                         keyboard.write("this")
                         keyboard.write("#28#")
                         appManager.control(application="explorer", instance=explorerId, control=1)
+                        hlLog.addEvent(str(time.getTime()), "explorer open", run)
                     elif (openExOReopenEx == 1 and decision == 1):
                         keyboard.write("#56#")
                         keyboard.write("#15#")
                         appManager.control(application="explorer", instance=explorerId, control=4)
+                        hlLog.addEvent(str(time.getTime()), "explorer maximize", run)
                     elif (openExOReopenEx == 1 and decision == -1):
                         mouse.move(1, 2)
                         mouse.click()
                         appManager.control(application="explorer", instance=explorerId, control=4)
+                        hlLog.addEvent(str(time.getTime()), "explorer maximize", run)
 
                     ## CHECK THE PATHES
                     ## Change directory to documents/summary
@@ -341,6 +358,7 @@ if __name__ == '__main__':
                         elif (decision == -1):
                             keyboard.write("#14#")
                         appManager.updatePath(explorerId, "documents/")
+                        hlLog.addEvent(str(time.getTime()), "explorer path to documents/", run)
 
                     ## Change directory to documents from MAIN
                     if (appManager.explorerPaths[explorerId] == "MAIN"):
@@ -367,6 +385,7 @@ if __name__ == '__main__':
                             keyboard.write("documents/")
                             keyboard.write("#28#")
                         appManager.updatePath(explorerId, "documents/")
+                        hlLog.addEvent(str(time.getTime()), "explorer path to documents/", run)
 
                     ## Change directory to documents/summary
                     if (appManager.explorerPaths[explorerId] == "documents/"):
@@ -393,18 +412,20 @@ if __name__ == '__main__':
                             keyboard.write("summary")
                             keyboard.write("#28#")
                         appManager.updatePath(explorerId, "documents/summary")
+                        hlLog.addEvent(str(time.getTime()), "explorer path to documents/summary", run)
 
-                        ## Open Q1 FILE
-                        decision = 0
-                        if random.random() < global_hotkeyusage:
-                            mouse.move(3, 3)
-                            mouse.click()
-                            keyboard.write("#28#")
-                        else:
-                            mouse.move(3, 3)
-                            mouse.doubleclick()
-                        notepadId = appManager.getInstance(application="notepad", purpose="open")
-                        appManager.control(application="notepad", instance=notepadId, control=1, param="summary.txt")
+                    ## Open SUMMARY FILE
+                    decision = 0
+                    if random.random() < global_hotkeyusage:
+                        mouse.move(3, 3)
+                        mouse.click()
+                        keyboard.write("#28#")
+                    else:
+                        mouse.move(3, 3)
+                        mouse.doubleclick()
+                    notepadId = appManager.getInstance(application="notepad", purpose="open")
+                    appManager.control(application="notepad", instance=notepadId, control=1, param="summary.txt")
+                    hlLog.addEvent(str(time.getTime()), "notepad open", run)
 
             readTime = np.random.normal(3.0 + (global_reactivity * 10), 0.7)
             time.delay(readTime)
@@ -427,11 +448,14 @@ if __name__ == '__main__':
                         mouse.move(4,4)
                         mouse.click()
                     appManager.control(application="notepad", instance=notepadId, control=0, param="summary.txt")
+                    hlLog.addEvent(str(time.getTime()), "notepad close", run)
 
                 if decide_minimize == 1:
                     mouse.move(4,4)
                     mouse.click()
+                    print(notepadId)
                     appManager.control(application="notepad", instance=notepadId, control=2, param="summary.txt")
+                    hlLog.addEvent(str(time.getTime()), "notepad minimize", run)
             return notepadId
 
 
@@ -450,6 +474,7 @@ if __name__ == '__main__':
                     mouse.move(1,2)
                     mouse.click()
                 appManager.control(application="notepad", instance=notepadId, control=4, param="Q1.txt")
+                hlLog.addEvent(str(time.getTime()), "notepad maximize", run)
 
         else:
             if random.random() < global_search:
@@ -461,6 +486,7 @@ if __name__ == '__main__':
                     keyboard.write("#28#")
                     notepadId = appManager.getInstance(application="notepad", purpose="open")
                     appManager.control(application="notepad", instance=notepadId, control=1, param="Q1.txt")
+                    hlLog.addEvent(str(time.getTime()), "notepad open", run)
                 else:
                     mouse.move(1,1)
                     mouse.click()
@@ -469,6 +495,7 @@ if __name__ == '__main__':
                     keyboard.write("#28#")
                     notepadId = appManager.getInstance(application="notepad", purpose="open")
                     appManager.control(application="notepad", instance=notepadId, control=1, param="Q1.txt")
+                    hlLog.addEvent(str(time.getTime()), "notepad open", run)
 
 
             else:
@@ -517,6 +544,7 @@ if __name__ == '__main__':
                     mouse.move(target_x=1, target_y=1)
                     mouse.click()
                     appManager.control(application="explorer", instance=explorerId, control=1)
+                    hlLog.addEvent(str(time.getTime()), "explorer open", run)
                 elif (openExOReopenEx == -1 and decision == 0):
                     mouse.move(target_x=1, target_y=1)
                     mouse.click()
@@ -524,19 +552,23 @@ if __name__ == '__main__':
                     mouse.move(target_x=1, target_y=2)
                     mouse.click()
                     appManager.control(application="explorer", instance=explorerId, control=1)
+                    hlLog.addEvent(str(time.getTime()), "explorer open", run)
                 elif (openExOReopenEx == -1 and decision == 1):
                     keyboard.write("#3675#")
                     keyboard.write("this")
                     keyboard.write("#28#")
                     appManager.control(application="explorer", instance=explorerId, control=1)
+                    hlLog.addEvent(str(time.getTime()), "explorer open", run)
                 elif (openExOReopenEx == 1 and decision == 1):
                     keyboard.write("#56#")
                     keyboard.write("#15#")
                     appManager.control(application="explorer", instance=explorerId, control=4)
+                    hlLog.addEvent(str(time.getTime()), "explorer maximize", run)
                 elif (openExOReopenEx == 1 and decision == -1):
                     mouse.move(1, 2)
                     mouse.click()
                     appManager.control(application="explorer", instance=explorerId, control=4)
+                    hlLog.addEvent(str(time.getTime()), "explorer maximize", run)
 
 
                 ## CHECK THE PATHES
@@ -563,6 +595,7 @@ if __name__ == '__main__':
                     elif (decision == -1):
                         keyboard.write("#14#")
                     appManager.updatePath(explorerId, "documents/")
+                    hlLog.addEvent(str(time.getTime()), "explorer path to documents/", run)
 
                 ## Change directory to documents from MAIN
                 if (appManager.explorerPaths[explorerId] == "MAIN"):
@@ -589,6 +622,7 @@ if __name__ == '__main__':
                         keyboard.write("documents/")
                         keyboard.write("#28#")
                     appManager.updatePath(explorerId, "documents/")
+                    hlLog.addEvent(str(time.getTime()), "explorer path to documents/", run)
 
                 ## Change directory to documents/summary
                 if (appManager.explorerPaths[explorerId] == "documents/"):
@@ -615,6 +649,7 @@ if __name__ == '__main__':
                         keyboard.write("2017")
                         keyboard.write("#28#")
                     appManager.updatePath(explorerId, "documents/2017")
+                    hlLog.addEvent(str(time.getTime()), "explorer path to documents/2017", run)
 
                 ## Open Q1 FILE
                 decision = 0
@@ -627,6 +662,7 @@ if __name__ == '__main__':
                     mouse.doubleclick()
                 notepadId = appManager.getInstance(application="notepad", purpose="open")
                 appManager.control(application="notepad", instance=notepadId, control=1, param="Q1.txt")
+                hlLog.addEvent(str(time.getTime()), "notepad open", run)
 
         readTime = np.random.normal(3.0 + (global_reactivity * 10), 0.7)
         time.delay(readTime)
@@ -649,11 +685,13 @@ if __name__ == '__main__':
                     mouse.move(4, 4)
                     mouse.click()
                 appManager.control(application="notepad", instance=notepadId, control=0, param="Q1.txt")
+                hlLog.addEvent(str(time.getTime()), "notepad close", run)
 
             if decide_minimize == 1:
                 mouse.move(4, 4)
                 mouse.click()
                 appManager.control(application="notepad", instance=notepadId, control=2, param="Q1.txt")
+                hlLog.addEvent(str(time.getTime()), "notepad minimize", run)
 
 
 #### ------------------------------------------------------------------>
@@ -671,6 +709,7 @@ if __name__ == '__main__':
                         mouse.move(1, 2)
                         mouse.click()
                     appManager.control(application="notepad", instance=notepadId, control=4, param="Q2.txt")
+                    hlLog.addEvent(str(time.getTime()), "notepad maximize", run)
 
             else:
                 if random.random() < global_search:
@@ -682,6 +721,7 @@ if __name__ == '__main__':
                         keyboard.write("#28#")
                         notepadId = appManager.getInstance(application="notepad", purpose="open")
                         appManager.control(application="notepad", instance=notepadId, control=1, param="Q2.txt")
+                        hlLog.addEvent(str(time.getTime()), "notepad open", run)
                     else:
                         mouse.move(1, 1)
                         mouse.click()
@@ -690,6 +730,7 @@ if __name__ == '__main__':
                         keyboard.write("#28#")
                         notepadId = appManager.getInstance(application="notepad", purpose="open")
                         appManager.control(application="notepad", instance=notepadId, control=1, param="Q2.txt")
+                        hlLog.addEvent(str(time.getTime()), "notepad open", run)
 
                 else:
                     ## DECIDE ON OPENING OR REOPENING EXPLORER
@@ -738,6 +779,7 @@ if __name__ == '__main__':
                         mouse.move(target_x=1, target_y=1)
                         mouse.click()
                         appManager.control(application="explorer", instance=explorerId, control=1)
+                        hlLog.addEvent(str(time.getTime()), "explorer open", run)
                     elif (openExOReopenEx == -1 and decision == 0):
                         mouse.move(target_x=1, target_y=1)
                         mouse.click()
@@ -745,19 +787,23 @@ if __name__ == '__main__':
                         mouse.move(target_x=1, target_y=2)
                         mouse.click()
                         appManager.control(application="explorer", instance=explorerId, control=1)
+                        hlLog.addEvent(str(time.getTime()), "explorer open", run)
                     elif (openExOReopenEx == -1 and decision == 1):
                         keyboard.write("#3675#")
                         keyboard.write("this")
                         keyboard.write("#28#")
                         appManager.control(application="explorer", instance=explorerId, control=1)
+                        hlLog.addEvent(str(time.getTime()), "explorer open", run)
                     elif (openExOReopenEx == 1 and decision == 1):
                         keyboard.write("#56#")
                         keyboard.write("#15#")
                         appManager.control(application="explorer", instance=explorerId, control=4)
+                        hlLog.addEvent(str(time.getTime()), "explorer maximize", run)
                     elif (openExOReopenEx == 1 and decision == -1):
                         mouse.move(1, 2)
                         mouse.click()
                         appManager.control(application="explorer", instance=explorerId, control=4)
+                        hlLog.addEvent(str(time.getTime()), "explorer maximize", run)
 
                     ## CHECK THE PATHES
                     ## Change directory to documents/summary
@@ -783,6 +829,7 @@ if __name__ == '__main__':
                         elif (decision == -1):
                             keyboard.write("#14#")
                         appManager.updatePath(explorerId, "documents/")
+                        hlLog.addEvent(str(time.getTime()), "explorer path to documents/", run)
 
                     ## Change directory to documents from MAIN
                     if (appManager.explorerPaths[explorerId] == "MAIN"):
@@ -809,6 +856,7 @@ if __name__ == '__main__':
                             keyboard.write("documents/")
                             keyboard.write("#28#")
                         appManager.updatePath(explorerId, "documents/")
+                        hlLog.addEvent(str(time.getTime()), "explorer path to documents/", run)
 
                     ## Change directory to documents/summary
                     if (appManager.explorerPaths[explorerId] == "documents/"):
@@ -835,6 +883,7 @@ if __name__ == '__main__':
                             keyboard.write("2017")
                             keyboard.write("#28#")
                         appManager.updatePath(explorerId, "documents/2017")
+                        hlLog.addEvent(str(time.getTime()), "explorer path to documents/2017", run)
 
                     ## Open Q1 FILE
                     decision = 0
@@ -847,6 +896,7 @@ if __name__ == '__main__':
                         mouse.doubleclick()
                     notepadId = appManager.getInstance(application="notepad", purpose="open")
                     appManager.control(application="notepad", instance=notepadId, control=1, param="Q2.txt")
+                    hlLog.addEvent(str(time.getTime()), "notebook open", run)
 
             readTime = np.random.normal(3.0 + (global_reactivity * 10), 0.7)
             time.delay(readTime)
@@ -869,11 +919,13 @@ if __name__ == '__main__':
                         mouse.move(4, 4)
                         mouse.click()
                     appManager.control(application="notepad", instance=notepadId, control=0, param="Q2.txt")
+                    hlLog.addEvent(str(time.getTime()), "notebook close", run)
 
                 if decide_minimize == 1:
                     mouse.move(4, 4)
                     mouse.click()
                     appManager.control(application="notepad", instance=notepadId, control=2, param="Q2.txt")
+                    hlLog.addEvent(str(time.getTime()), "notebook minimize", run)
 
 
 #### ------------------------------------------------------------------>
@@ -883,17 +935,20 @@ if __name__ == '__main__':
 
         if random.random() < global_hotkeyusage:
             keyboard.write("#3675#")
-            keyboard.write("#calc#")
+            keyboard.write("calc")
             keyboard.write("#28#")
             appManager.control(application="calculator", instance=calcId, control=1, param="")
+            hlLog.addEvent(str(time.getTime()), "calculator open", run)
         else:
             mouse.move(1, 2)
             mouse.click()
             appManager.control(application="calculator", instance=calcId, control=1, param="")
+            hlLog.addEvent(str(time.getTime()), "calculator open", run)
 
         if forceOpen == False:
             if random.random() < global_minimize:
                 appManager.control(application="calculator", instance=calcId, control=2, param="")
+                hlLog.addEvent(str(time.getTime()), "calculator minimize", run)
 
         return calcId
 
@@ -917,6 +972,7 @@ if __name__ == '__main__':
                 mouse.move(1,2)
                 mouse.click()
             appManager.control(application="calculator", instance=calcId, control=4)
+            hlLog.addEvent(str(time.getTime()), "calculator maximize", run)
 
         ## do the math
         if np.random.exponential(0.25) < global_hotkeyusage:
@@ -942,11 +998,13 @@ if __name__ == '__main__':
                 mouse.move(4, 4)
                 mouse.click()
             appManager.control(application="calculator", instance=calcId, control=0)
+            hlLog.addEvent(str(time.getTime()), "calculator close", run)
 
         if decide_minimize == 1:
             mouse.move(4,4)
             mouse.click()
             appManager.control(application="calculator", instance=calcId, control=2)
+            hlLog.addEvent(str(time.getTime()), "calculator minimize", run)
 
 #### ------------------------------------------------------------------>
 
@@ -964,6 +1022,7 @@ if __name__ == '__main__':
                     mouse.move(1, 2)
                     mouse.click()
                 appManager.control(application="notepad", instance=notepadId, control=4, param="summary.txt")
+                hlLog.addEvent(str(time.getTime()), "notepad maximize", run)
         else:
             notepadId = taskOne(forceOpen=True)
 
@@ -990,12 +1049,14 @@ if __name__ == '__main__':
             mouse.click()
             mouse.click()
         appManager.control(application="notepad", instance=notepadId, control=0, param="summary.txt")
+        hlLog.addEvent(str(time.getTime()), "notepad close", run)
 
 
 #### ------------------------------------------------------------------>
 
 
     """ Initialize """
+    hlLog = HighLevelLogManager("hl_userbehavior.csv")
     log = LogManager("userbehaviorlog.csv")
     for run in range(1,runs+1):
         taskManager = TaskCompletionManager(chance_repetition=global_repetition, max_repetition=1,
@@ -1004,17 +1065,19 @@ if __name__ == '__main__':
 
         time = Timing()
         appManager = ApplicationInstanceManagement(timing=time, logmanager=log, ARRAY_SIZE=ARRAY_SIZE, maxInstanceCalculator=maxInstanceCalculator,
-                                                   maxInstanceExplorer=maxInstanceExplorer, maxInstanceNotepad=maxInstanceNotepad, case=run)
-        mouse = MouseMovementManager(timing=time, logmanager=log, mouse_precision=global_mouseprecision, reactivity=global_reactivity, case=run)
-        keyboard = KeyboardManager(timing=time, logmanager=log, keyprecision=global_keyprecision, reactivity=global_reactivity, case=run)
+                                                   maxInstanceExplorer=maxInstanceExplorer, maxInstanceNotepad=maxInstanceNotepad, case=run, hllog=hlLog)
+        mouse = MouseMovementManager(timing=time, logmanager=log, mouse_precision=global_mouseprecision, reactivity=global_reactivity, case=run, hllog=hlLog)
+        keyboard = KeyboardManager(timing=time, logmanager=log, keyprecision=global_keyprecision, reactivity=global_reactivity, case=run, hllog=hlLog)
 
         #if taskManager.current_task == 0:
         #    taskZero()
 
         #seqs = [0, 1, 3, 4, 2, 6, 5]
         seqs = [0, 1, 2, 3, 4, 5, 6]
+        #seqs = [0, 1, 2, 2, 3, 3, 1, 4, 5, 4, 6]
         print(taskManager.sequence)
-        for task in seqs:  # taskManager.sequence:
+        print("Run ", run)
+        for task in taskManager.sequence:
             if task == 0:
                 taskZero()
             elif task == 1:
@@ -1031,3 +1094,4 @@ if __name__ == '__main__':
                 taskSix()
 
     log.writeToCsv()
+    hlLog.writeToCsv()
