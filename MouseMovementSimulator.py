@@ -4,7 +4,7 @@ import random
 class MouseMovementManager():
     """ Simulates the movement of the mouse """
 
-    def __init__(self, timing, logmanager, mouse_precision, reactivity, case):
+    def __init__(self, timing, logmanager, mouse_precision, reactivity, case, hllog):
         self.timing = timing
         self.logmanager = logmanager
         self.mouse_X = 4
@@ -13,6 +13,7 @@ class MouseMovementManager():
         self.reactivity = reactivity
         self.case = case
 
+        self.hllog = hllog
 
     def move(self, target_x, target_y):
 
@@ -48,6 +49,7 @@ class MouseMovementManager():
                      self.mouse_X += leftOright
                      self.logmanager.addEvent(str(self.timing.getTime()), "M",
                                               str("[" + str(self.mouse_X) + "," + str(self.mouse_Y) + "]"), self.case)
+                     self.hllog.addEvent(str(self.timing.getTime()), "mouse to " + str(self.mouse_X) + "," + str(self.mouse_Y) , self.case)
 
 
              else:
@@ -79,6 +81,8 @@ class MouseMovementManager():
                      self.moveDelay()
                      self.mouse_Y += downOup
                      self.logmanager.addEvent(str(self.timing.getTime()), "M", str("[" + str(self.mouse_X) + "," + str(self.mouse_Y) + "]"), self.case)
+                     self.hllog.addEvent(str(self.timing.getTime()),
+                                     "mouse to " + str(self.mouse_X) + "," + str(self.mouse_Y), self.case)
 
 
     def moveDelay(self):
@@ -90,11 +94,14 @@ class MouseMovementManager():
         self.logmanager.addEvent(str(self.timing.getTime()), "K3",
                                  str("[1," + str(self.mouse_X) + "," + str(self.mouse_Y) + "]"), self.case)
 
+        self.hllog.addEvent(str(self.timing.getTime()), "mouse click", self.case)
+
     def rightclick(self):
         self.clickDelay()
         self.logmanager.addEvent(str(self.timing.getTime()), "K3",
                                  str("[2," + str(self.mouse_X) + "," + str(self.mouse_Y) + "]"), self.case)
 
+        self.hllog.addEvent(str(self.timing.getTime()), "mouse rightclick", self.case)
 
     def doubleclick(self):
         self.clickDelay()
@@ -103,6 +110,8 @@ class MouseMovementManager():
         self.doubleclickDelay()
         self.logmanager.addEvent(str(self.timing.getTime()), "K3",
                                  str("[1," + str(self.mouse_X) + "," + str(self.mouse_Y) + "]"), self.case)
+
+        self.hllog.addEvent(str(self.timing.getTime()), "mouse doubleclick", self.case)
 
     def clickDelay(self):
         delay = np.random.normal((0.15 + (self.reactivity * 0.2)), 0.03)

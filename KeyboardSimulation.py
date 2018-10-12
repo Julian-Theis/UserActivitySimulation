@@ -4,12 +4,14 @@ import random
 class KeyboardManager():
     """ Manages the Keyboard inputs """
 
-    def __init__(self, timing, logmanager, keyprecision, reactivity, case):
+    def __init__(self, timing, logmanager, keyprecision, reactivity, case, hllog):
         self.timing = timing
         self.logmanager = logmanager
         self.precision = keyprecision
         self.reactivity = reactivity
         self.case = case
+        self.hllog = hllog
+
         self.numKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '=']
 
     def write(self, buffer):
@@ -18,6 +20,7 @@ class KeyboardManager():
             self.delay()
             self.logmanager.addEvent(str(self.timing.getTime()), "K1",
                                      str("[" + str(key) + "]"), self.case)
+            self.hllog.addEvent(str(self.timing.getTime()), "key " + str(key),  self.case)
         else:
             i = 0
             while i < len(buffer):
@@ -29,6 +32,7 @@ class KeyboardManager():
                     out = "TEXT"
                 self.logmanager.addEvent(str(self.timing.getTime()), "K1",
                                          str("[" + str(out) + "]"), self.case)
+                self.hllog.addEvent(str(self.timing.getTime()), "key " + str(out), self.case)
                 if random.random() < self.precision:
                     i = i + 1
 

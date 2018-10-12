@@ -1,0 +1,145 @@
+441,key 3675,1
+918,key TEXT,1
+1214,key TEXT,1
+1544,key TEXT,1
+1706,key TEXT,1
+2088,key 28,1
+2502,explorer open,1
+2847,"mouse to 4,2",1
+3177,"mouse to 3,2",1
+3600,"mouse to 2,2",1
+3812,mouse doubleclick,1
+3812,explorer path to documents/,1
+4028,mouse doubleclick,1
+4028,explorer path to documents/summary,1
+4436,"mouse to 3,2",1
+4640,"mouse to 3,3",1
+4820,mouse rightclick,1
+5203,"mouse to 3,2",1
+5342,mouse click,1
+5445,mouse click,1
+5588,mouse click,1
+5728,mouse click,1
+6112,key 14,1
+6576,key TEXT,1
+7137,key TEXT,1
+7554,key TEXT,1
+7966,key TEXT,1
+8468,key TEXT,1
+8589,key TEXT,1
+8836,key TEXT,1
+9305,key TEXT,1
+9805,key TEXT,1
+10155,key TEXT,1
+10658,key TEXT,1
+10989,key 28,1
+11382,"mouse to 3,3",1
+11624,"mouse to 4,3",1
+11922,"mouse to 4,4",1
+12071,mouse click,1
+12402,explorer minimize,1
+12716,key 56,1
+13087,key 15,1
+13603,explorer maximize,1
+13933,"mouse to 3,4",1
+14185,"mouse to 3,3",1
+14351,mouse click,1
+14661,key 28,1
+15121,notepad open,1
+17934,"mouse to 4,3",1
+18270,"mouse to 4,4",1
+18406,mouse click,1
+18858,notepad minimize,1
+19424,key 56,1
+19767,key 15,1
+20027,explorer maximize,1
+20271,"mouse to 4,3",1
+20535,"mouse to 3,3",1
+20819,"mouse to 3,2",1
+20996,"mouse to 2,2",1
+21253,"mouse to 1,2",1
+21464,mouse doubleclick,1
+21464,explorer path to documents/,1
+21676,"mouse to 2,2",1
+21917,mouse doubleclick,1
+21917,explorer path to documents/2017,1
+22228,"mouse to 2,3",1
+22478,"mouse to 3,3",1
+22628,mouse click,1
+23220,key 28,1
+23576,notepad open,1
+26322,"mouse to 3,4",1
+26664,"mouse to 4,4",1
+26802,mouse click,1
+27131,notepad minimize,1
+27450,key 56,1
+27787,key 15,1
+28064,explorer maximize,1
+28450,"mouse to 4,3",1
+28768,"mouse to 3,3",1
+28890,mouse click,1
+29437,key 28,1
+29877,notebook open,1
+33855,"mouse to 4,3",1
+34198,"mouse to 4,4",1
+34374,mouse click,1
+34733,notebook minimize,1
+35247,key 3675,1
+35657,key TEXT,1
+35909,key TEXT,1
+36281,key TEXT,1
+36763,key TEXT,1
+37215,key 28,1
+37769,calculator open,1
+38048,calculator minimize,1
+44162,key 56,1
+44456,key 15,1
+44827,calculator maximize,1
+45107,key NUM,1
+45512,key NUM,1
+45864,key NUM,1
+46227,key NUM,1
+46614,key NUM,1
+46976,key NUM,1
+47380,key NUM,1
+47790,key NUM,1
+48315,key NUM,1
+48519,key NUM,1
+48871,key NUM,1
+49034,mouse click,1
+49559,calculator minimize,1
+49964,key 56,1
+50356,key 15,1
+50704,notepad maximize,1
+54389,key TEXT,1
+54832,key TEXT,1
+54995,key TEXT,1
+55397,key TEXT,1
+55821,key TEXT,1
+56068,key TEXT,1
+56469,key TEXT,1
+56556,key TEXT,1
+56961,key NUM,1
+57447,key NUM,1
+57977,key NUM,1
+58309,key NUM,1
+58565,key NUM,1
+59113,key TEXT,1
+59538,key TEXT,1
+59946,key TEXT,1
+60378,key TEXT,1
+60772,key TEXT,1
+60911,key TEXT,1
+61239,key TEXT,1
+61565,key TEXT,1
+61951,key TEXT,1
+62448,key NUM,1
+62887,key NUM,1
+63061,key NUM,1
+63494,key NUM,1
+63773,key NUM,1
+64157,key 29,1
+64534,key TEXT,1
+64884,key 56,1
+65186,key 62,1
+65563,notepad close,1

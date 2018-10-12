@@ -14,7 +14,7 @@ class ApplicationInstanceManagement():
                         """
 
 
-    def __init__(self, ARRAY_SIZE, maxInstanceExplorer, maxInstanceCalculator, maxInstanceNotepad, timing, logmanager, case):
+    def __init__(self, ARRAY_SIZE, maxInstanceExplorer, maxInstanceCalculator, maxInstanceNotepad, timing, logmanager,hllog, case):
         self.appHierarchy = []
         self.maxInstanceExplorer = maxInstanceExplorer
         self.maxInstanceCalculator = maxInstanceCalculator
@@ -28,6 +28,7 @@ class ApplicationInstanceManagement():
 
         self.timing = timing
         self.logmanager = logmanager
+        self.hllog = hllog
 
         self.case = case
 
@@ -38,7 +39,7 @@ class ApplicationInstanceManagement():
             running = True
         return running
 
-    def similarity(a, b):
+    def similarity(self, a, b):
         return SequenceMatcher(None, a, b).ratio()
 
     def possibleToOpenNewExplorer(self):
@@ -71,7 +72,7 @@ class ApplicationInstanceManagement():
             else:
                 metric = -1
                 for poss in possible_explorer:
-                    met = self.similar(self.explorerPaths[poss], targetpath)
+                    met = self.similarity(self.explorerPaths[poss], targetpath)
                     if(met > metric):
                         metric = met
                         index = poss
@@ -97,7 +98,7 @@ class ApplicationInstanceManagement():
             if len(possible_calc) == 1:
                 index = possible_calc[0]
             else:
-                selector = random.randint(0, len(possible_calc))
+                selector = random.randint(0, (len(possible_calc)-1))
                 index = possible_calc[selector]
 
         return index
@@ -131,8 +132,11 @@ class ApplicationInstanceManagement():
 
     def updateHierarchyToFG(self, pid, process):
         # https://stackoverflow.com/questions/2150108/efficient-way-to-shift-a-list-in-python
+
         item = str(pid) + "#" + str(process)
-        self.appHierarchy.remove(item)
+        #print(self.appHierarchy, "delete item", item)
+        if item in self.appHierarchy:
+            self.appHierarchy.remove(item)
         self.hierarchyChangeStatusFirstElement()
         items = deque(self.appHierarchy)
         items.append(item)
@@ -142,13 +146,15 @@ class ApplicationInstanceManagement():
     def updateHierarchyClose(self, pid, process):
         # https://stackoverflow.com/questions/2150108/efficient-way-to-shift-a-list-in-python
         item = str(pid) + "#" + str(process)
-        self.appHierarchy.remove(item)
-        self.hierarchyChangeStatusFirstElement()
+        if item in self.appHierarchy:
+            self.appHierarchy.remove(item)
+            self.hierarchyChangeStatusFirstElement()
 
     def updateHierarchyMinimize(self, pid, process):
         # https://stackoverflow.com/questions/2150108/efficient-way-to-shift-a-list-in-python
         item = str(pid) + "#" + str(process)
-        self.appHierarchy.remove(item)
+        if item in self.appHierarchy:
+            self.appHierarchy.remove(item)
         self.appHierarchy.append(item)
         self.hierarchyChangeStatusFirstElement()
 
