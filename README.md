@@ -24,3 +24,5 @@ This project is the implementation of the user simulation described in [Behavior
  keywords = {behavioral petri nets, human-computer interaction recommendation, multi-application environments, software process mining, user behavior optimization},
 }
 ```
+
+[![HitCount](http://hits.dwyl.io/Julian-Theis/UserActivitySimulation.svg)](http://hits.dwyl.io/Julian-Theis/UserActivitySimulation)
